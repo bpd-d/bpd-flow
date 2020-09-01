@@ -1,0 +1,49 @@
+{
+  "name": "bpd-flow",
+  "version": "0.1.0",
+  "description": "Library for data flow",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "files": [
+    "/dist/index.js",
+    "/dist/index.js.map",
+    "/dist/index.d.ts"
+  ],
+  "scripts": {
+    "dev": "webpack-dev-server --config webpack.development.js",
+    "build": "webpack --config webpack.production.js",
+    "test": "karma start karma.config.js"
+  },
+  "bugs": {
+    "url": "https://github.com/bpd-d/bpd-flow/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bpd-d/bpd-flow.git"
+  },
+  "homepage": "https://github.com/bpd-d/bpd-flow#readme",
+  "keywords": [
+    "ui",
+    "cui",
+    "framework",
+    "light"
+  ],
+  "author": "BP",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jasmine": "^3.5.12",
+    "clean-webpack-plugin": "^3.0.0",
+    "dts-bundle": "^0.7.3",
+    "jasmine": "^3.6.1",
+    "karma-typescript": "^5.0.3",
+    "serialize-javascript": ">=2.1.1",
+    "terser-webpack-plugin": "^3.1.0",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-karma-jasmine": "^4.0.0",
+    "webpack-merge": "^4.2.2"
+  }
+}
