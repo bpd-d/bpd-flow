@@ -1,4 +1,4 @@
-import { FlowAction, IFlowDict, IFlowEventCallback, FlowEventType, Actions } from "./api/interfaces";
+import { FlowAction, IFlowDict, IFlowEventCallback, FlowEventType, Actions, TaskIdItem, TaskDetails } from "./api/interfaces";
 import { FlowInvoker, FlowAsyncInvoker } from "./api/invoker";
 import { FlowTask } from "./api/task";
 import { getActionListFromObj } from "./api/action";
@@ -39,12 +39,22 @@ export class Flow<T, V> {
         })
     }
 
-    subscribe(name: string, task?: FlowTask<V>): FlowTask<V> {
+    subscribe(name: string, details?: TaskDetails<V>): FlowTask<V> {
         let action = this.actions[name];
-        if (action) {
-            return action.subscribe(task);
+        if (!action) {
+            return null;
         }
-        return null;
+        if (!details) {
+            return action.subscribe();
+        }
+        let task = action.subscribe(details.task);
+        if (details.finish) {
+            task.finish(details.finish);
+        }
+        if (details.error) {
+            task.error(details.error);
+        }
+        return task;
     }
 
     unsubscribe(name: string, id: string) {
@@ -93,7 +103,7 @@ export class FlowActionManager<T, V> {
         return flowTask;
     }
 
-    unsubscribe(id: string) {
+    unsubscribe(id: TaskIdItem<V>) {
         let idx = this.findTaskIndex(id)
         if (idx > -1) {
             this.#subscribers.splice(idx, 1);
@@ -113,7 +123,13 @@ export class FlowActionManager<T, V> {
         }
     }
 
-    private findTaskIndex(id: string): number {
+    private findTaskIndex(task: TaskIdItem<V>): number {
+        let id: string = "";
+        if (typeof task === 'string') {
+            id = task;
+        } else {
+            id = task.id;
+        }
         return this.#subscribers.findIndex(it => it.id === id);
     }
 

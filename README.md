@@ -70,6 +70,9 @@ flow.perform("TestAction", "foo");
 After action finished, all subscriptions get updated with data returned by the action.
 
 # CHANGELOG
+## [0.1.2] 2020-09-07
+* [Added] - Additional check when creating FlowAction instance
+* [Added] - Shorthands when subscribing to action - finish and error callback can be set when subscribing
 ## [0.1.1] 2020-09-07 - New features
 * [Added] - Factory to create Flow objects: from object or from action list
 ## [0.1.0] 2020-09-02 - Initial release

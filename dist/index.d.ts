@@ -9,7 +9,7 @@ export class FlowFactory {
 export class Flow<T, V> {
     actions: FlowManagers<T, V>;
     constructor(...actions: FlowAction<T, V>[]);
-    subscribe(name: string, task?: FlowTask<V>): FlowTask<V>;
+    subscribe(name: string, details?: TaskDetails<V>): FlowTask<V>;
     unsubscribe(name: string, id: string): void;
     perform(actionName: string, args?: T): void;
 }
@@ -20,7 +20,7 @@ export class FlowActionManager<T, V> {
     #private;
     constructor(action: FlowAction<T, V>);
     subscribe(task?: FlowTask<V>): FlowTask<V>;
-    unsubscribe(id: string): void;
+    unsubscribe(id: TaskIdItem<V>): void;
     perform(t: T, key?: string): void;
     getStats(): any;
 }
@@ -61,6 +61,18 @@ export interface IFlowDict<T> {
 }
 export interface Actions<T, V> {
     [name: string]: (t: T) => V;
+}
+export type TaskIdItem<T> = string | FlowTask<T>;
+export interface OnFinishCallback<T> {
+    (t: T): void;
+}
+export interface OnErrorCallback {
+    (t: Error): void;
+}
+export interface TaskDetails<T> {
+    task?: FlowTask<T>;
+    finish?: OnFinishCallback<T>;
+    error?: OnErrorCallback;
 }
 
 export class FlowTask<T> {

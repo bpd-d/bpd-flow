@@ -142,3 +142,34 @@ describe("Tests for class [FlowFactory]", function () {
     })
 
 })
+
+describe("Tests for class [Flow] shorthands", function () {
+
+    beforeEach(() => {
+
+    })
+
+    it("Simple test, many actions", async function () {
+        const flow = FlowFactory.create<ActionsInputs, ActionsOutputs>(ActionsGroup);
+        let sub = flow.subscribe("ACTION_1", {
+            finish: (val: string) => {
+                res = val;
+            }
+        });
+
+        let sub2 = flow.subscribe("ACTION_2", {
+            finish: (val: number) => {
+                res2 = val;
+            }
+        });
+        let res = "?";
+        let res2 = -1;
+        flow.perform("ACTION_1", "1");
+        flow.perform("ACTION_2", 1);
+        await sleep(10);
+        expect(res).toEqual("1XXX");
+        expect(res2).toEqual(2);
+
+    })
+
+})

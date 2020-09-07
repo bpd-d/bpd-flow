@@ -22,7 +22,7 @@ export class Action<T, V> implements FlowAction<T, V> {
 export function getActionListFromObj<T, V>(actions: Actions<T, V>): FlowAction<T, V>[] {
     let list: FlowAction<T, V>[] = [];
     for (let actionName in actions) {
-        if (actions.hasOwnProperty(actionName)) {
+        if (actions.hasOwnProperty(actionName) && typeof actions[actionName] === 'function') {
             list.push(new Action(actionName, actions[actionName]))
         }
     }

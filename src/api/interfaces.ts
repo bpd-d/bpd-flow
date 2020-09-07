@@ -1,3 +1,5 @@
+import { FlowTask } from "./task";
+
 export interface FlowAction<T, V> {
     name: string;
     perform(t?: T): Promise<V>;
@@ -29,4 +31,20 @@ export interface IFlowDict<T> {
 
 export interface Actions<T, V> {
     [name: string]: (t: T) => V;
+}
+
+export type TaskIdItem<T> = string | FlowTask<T>;
+
+export interface OnFinishCallback<T> {
+    (t: T): void;
+}
+
+export interface OnErrorCallback {
+    (t: Error): void;
+}
+
+export interface TaskDetails<T> {
+    task?: FlowTask<T>;
+    finish?: OnFinishCallback<T>;
+    error?: OnErrorCallback;
 }
