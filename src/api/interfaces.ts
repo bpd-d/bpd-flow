@@ -26,3 +26,7 @@ export interface IFlowDict<T> {
     first(): T;
     removeIndex(index: number): void;
 }
+
+export interface Actions<T, V> {
+    [name: string]: (t: T) => V;
+}

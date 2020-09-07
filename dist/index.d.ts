@@ -2,12 +2,16 @@
 
 export const BPD_Flow_ver = "0.1.0";
 export function counter(): Generator<number, void, unknown>;
+export class FlowFactory {
+    static create<T, V>(actions: Actions<T, V>): Flow<T, V>;
+    static fromList<T, V>(...actions: FlowAction<T, V>[]): Flow<T, V>;
+}
 export class Flow<T, V> {
     actions: FlowManagers<T, V>;
     constructor(...actions: FlowAction<T, V>[]);
     subscribe(name: string, task?: FlowTask<V>): FlowTask<V>;
     unsubscribe(name: string, id: string): void;
-    perform(actionName: string, args: T): void;
+    perform(actionName: string, args?: T): void;
 }
 export interface FlowManagers<T, V> {
     [id: string]: FlowActionManager<T, V>;
@@ -54,6 +58,9 @@ export interface IFlowDict<T> {
     shift(): T;
     first(): T;
     removeIndex(index: number): void;
+}
+export interface Actions<T, V> {
+    [name: string]: (t: T) => V;
 }
 
 export class FlowTask<T> {

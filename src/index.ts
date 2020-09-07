@@ -1,6 +1,7 @@
-import { FlowAction, IFlowDict, IFlowEventCallback, FlowEventType } from "./api/interfaces";
+import { FlowAction, IFlowDict, IFlowEventCallback, FlowEventType, Actions } from "./api/interfaces";
 import { FlowInvoker, FlowAsyncInvoker } from "./api/invoker";
 import { FlowTask } from "./api/task";
+import { getActionListFromObj } from "./api/action";
 
 export const BPD_Flow_ver = "0.1.0";
 
@@ -15,6 +16,17 @@ export function* counter() {
         if (reset || idx > 200000) {
             idx = 0
         }
+    }
+}
+
+export class FlowFactory {
+    static create<T, V>(actions: Actions<T, V>): Flow<T, V> {
+        let list = getActionListFromObj(actions);
+        return new Flow(...list);
+    }
+
+    static fromList<T, V>(...actions: FlowAction<T, V>[]): Flow<T, V> {
+        return new Flow(...actions);
     }
 }
 
@@ -42,7 +54,7 @@ export class Flow<T, V> {
         }
     }
 
-    perform(actionName: string, args: T) {
+    perform(actionName: string, args?: T) {
         let action = this.actions[actionName];
         if (action) {
             action.perform(args);
@@ -71,7 +83,7 @@ export class FlowActionManager<T, V> {
     subscribe(task?: FlowTask<V>): FlowTask<V> {
         let flowTask = null;
         if (!task) {
-            flowTask = new FlowTask<V>(COUNTER.next + "");
+            flowTask = new FlowTask<V>(COUNTER.next().value + "");
         } else if (this.findTaskIndex(task.id) > -1) {
             return task;
         } else {

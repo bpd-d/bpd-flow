@@ -40,3 +40,13 @@ export class TestActionLong implements FlowAction<number, number> {
 
 export type ActionsInputs = number | string;
 export type ActionsOutputs = number | string;
+
+
+export const ActionsGroup = {
+    "ACTION_1": (text: string) => {
+        return text + "XXX";
+    },
+    "ACTION_2": (num: number) => {
+        return num + 1;
+    }
+}

@@ -1,5 +1,5 @@
-import { TestAction, ActionsInputs, ActionsOutputs, TestAction2, TestActionLong } from "./static/actions"
-import { FlowActionManager, Flow } from "../src";
+import { TestAction, ActionsInputs, ActionsOutputs, TestAction2, TestActionLong, ActionsGroup } from "./static/actions"
+import { FlowActionManager, Flow, FlowFactory } from "../src";
 import { sleep } from "./static/functions";
 
 describe("Tests for class [FlowActionManager]", function () {
@@ -109,6 +109,35 @@ describe("Tests for class [Flow]", function () {
         await sleep(10);
         expect(res).toEqual(2);
         expect(res2).toEqual("11");
+
+    })
+
+})
+
+describe("Tests for class [FlowFactory]", function () {
+
+    beforeEach(() => {
+
+    })
+
+    it("Simple test, many actions", async function () {
+        const flow = FlowFactory.create<ActionsInputs, ActionsOutputs>(ActionsGroup);
+        let sub = flow.subscribe("ACTION_1");
+        let sub2 = flow.subscribe("ACTION_2");
+        let res = "?";
+        let res2 = -1;
+        sub.finish((val: string) => {
+            res = val;
+        });
+        sub2.finish((val: number) => {
+            res2 = val;
+        })
+
+        flow.perform("ACTION_1", "1");
+        flow.perform("ACTION_2", 1);
+        await sleep(10);
+        expect(res).toEqual("1XXX");
+        expect(res2).toEqual(2);
 
     })
 
